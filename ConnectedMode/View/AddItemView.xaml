@@ -1,0 +1,105 @@
+<UserControl x:Class="ConnectedMode.View.AddItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel>
+        <TextBlock
+            DockPanel.Dock="Top"
+            TextAlignment="Center"
+            Text="Add item"
+            FontWeight="Medium" />
+        
+        <UniformGrid 
+            DockPanel.Dock="Bottom" 
+            Rows="1" 
+            Height="30">
+
+            <Button Content="Add"
+                    Command="{Binding AddCommand}"
+                    Margin="5,0,5,5" />
+            <Button Content="Back"
+                    Command="{Binding BackCommand}"
+                    Margin="5,0,5,5" />
+            
+        </UniformGrid>
+        
+        <StackPanel Margin="10">
+            
+            <TextBlock
+                Text="Item name:"
+                Margin="0,5,0,5" />
+            <TextBox
+                Text="{Binding CurrentItem.ItemName}" />
+
+            <TextBlock Text="Сategory:"
+                       Margin="0,5,0,5" />
+            <ComboBox SelectedValue="{Binding CurrentItem.Category}" SelectedValuePath="Text">
+                <TextBlock Text="Food Products" />
+                <TextBlock Text="Electronics" />
+                <TextBlock Text="Clothing" />
+                <TextBlock Text="Toys" />
+                <TextBlock Text="Furniture"/>
+            </ComboBox>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Grid.Row="0"
+                           Text="Price:"
+                           Margin="0,5,0,5" />
+
+                <xctk:IntegerUpDown
+                    Grid.Row="1"
+                    Minimum="1"
+                    Grid.Column="0"
+                    Width="40"
+                    HorizontalAlignment="Left" 
+                    Text="{Binding CurrentItem.Price}"/>
+
+                <TextBlock
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Text="Quantity:"
+                    Margin="0,5,0,5">
+                </TextBlock>
+
+                <xctk:IntegerUpDown
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Minimum="1"
+                    Width="40"
+                    HorizontalAlignment="Left"
+                    Text="{Binding CurrentItem.Quantity}"/>
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Description:"
+                    Margin="0,5,0,5" />
+
+                <TextBox
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Text="{Binding CurrentItem.Description}" />
+            </Grid>
+
+        </StackPanel>
+    </DockPanel>
+</UserControl>

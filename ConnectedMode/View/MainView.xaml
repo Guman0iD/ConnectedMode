@@ -1,0 +1,28 @@
+<Window x:Class="ConnectedMode.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm = "clr-namespace:ConnectedMode.ViewModel"
+        xmlns:v = "clr-namespace:ConnectedMode.View"
+        mc:Ignorable="d"
+        Title="Store" Height="450" Width="550"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:ItemsViewModel}">
+            <v:ItemsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ItemsInfoViewModel}">
+            <v:ItemsInfoView/>
+        </DataTemplate> 
+        <DataTemplate DataType="{x:Type vm:AddItemViewModel}">
+            <v:AddItemView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UpdateItemViewModel}">
+            <v:UpdateItemView/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ContentPresenter Content="{Binding CurrentViewModel}"/>
+    </Grid>
+</Window>
