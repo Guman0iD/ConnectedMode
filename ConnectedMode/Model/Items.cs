@@ -21,19 +21,6 @@ public partial class Items : ObservableObject
         Id = GetNextId();
     }
     
-    public Items Clone()
-    {
-        return new Items
-        {
-            Id = this.Id,
-            ItemName = this.ItemName,
-            Quantity = this.Quantity,
-            Category = this.Category,
-            Price = this.Price,
-            Description = this.Description,
-            AddedDate = this.AddedDate
-        };
-    }
     
     [ObservableProperty]
     private int _id;

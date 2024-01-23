@@ -8,6 +8,6 @@ public class UpdateItemMessage
 
     public UpdateItemMessage(Items updatedItem)
     {
-        UpdatedItem = updatedItem.Clone();
+        UpdatedItem = updatedItem;
     }
 }

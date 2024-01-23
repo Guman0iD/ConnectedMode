@@ -39,6 +39,7 @@ namespace ConnectedMode
             ServiceCollection.AddSingleton<UpdateItemMessage>();
             ServiceCollection.AddSingleton<IConfiguration>(configuration);
             ServiceCollection.AddTransient<ErrorMessage>();
+            ServiceCollection.AddTransient<DataBaseService>();
             
             ServiceProvider = ServiceCollection.BuildServiceProvider();
             var view = ServiceProvider.GetService<MainView>()!;

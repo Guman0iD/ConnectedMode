@@ -1,38 +1,11 @@
 [
   {
-    "Id": 1,
-    "ItemName": "qwe",
-    "Quantity": 1,
+    "Id": 9,
+    "ItemName": "Notebook",
+    "Quantity": 50,
     "Category": "Electronics",
-    "Price": 1,
-    "Description": "qwe",
-    "AddedDate": "2024-01-22T19:00:12.8913147+04:00"
-  },
-  {
-    "Id": 3,
-    "ItemName": "qeweqw",
-    "Quantity": 4,
-    "Category": "Food Products",
-    "Price": 1,
-    "Description": "qweqweqwe",
-    "AddedDate": "2024-01-22T19:05:10.6492705+04:00"
-  },
-  {
-    "Id": 4,
-    "ItemName": "veavea",
-    "Quantity": 3,
-    "Category": "Clothing",
-    "Price": 3,
-    "Description": "qwrqwr",
-    "AddedDate": "2024-01-22T19:05:21.0813505+04:00"
-  },
-  {
-    "Id": 5,
-    "ItemName": "qweqwe",
-    "Quantity": 1,
-    "Category": "Food Products",
-    "Price": 1,
-    "Description": "qewwqe",
-    "AddedDate": "2024-01-22T19:07:42.5534568+04:00"
+    "Price": 900,
+    "Description": "Asus",
+    "AddedDate": "2024-01-23T16:00:47.1779853+04:00"
   }
 ]

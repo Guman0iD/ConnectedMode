@@ -16,22 +16,26 @@ namespace ConnectedMode.ViewModel;
 [INotifyPropertyChanged]
 public partial class ItemsViewModel : BaseViewModel
 {
-    public ObservableCollection<Items?> ItemsList { get; }
-    public ObservableCollection<Items?> SearchedItems { get; }
+    public ICollection<Items?> ItemsList { get; }
+    public ICollection<Items?> SearchedItems { get; }
     private readonly ViewModelFactory _factory;
     private readonly IConfiguration _config;
+    private DataBaseService _dbService;
 
     [ObservableProperty] 
-    private string _searchKeyword;
+    private string? _searchKeyword;
+    [ObservableProperty]
+    private int _quantityCount;
 
-    public ItemsViewModel(IConfiguration config, ViewModelFactory factory)
+    public ItemsViewModel(IConfiguration config, ViewModelFactory factory, DataBaseService dbService)
     {
         _config = config;
         _factory = factory;
+        _dbService = dbService;
         ItemsList = new ObservableCollection<Items?>();
         SearchedItems = new ObservableCollection<Items?>();
-        JsonAdd json = new JsonAdd();
-        List<Items> itemsFromFile = json.GetItemsFromFile();
+        JsonBase jsonBase = new JsonBase();
+        List<Items> itemsFromFile = jsonBase.GetItemsFromFile();
 
         foreach (var game in itemsFromFile)
         {
@@ -42,17 +46,28 @@ public partial class ItemsViewModel : BaseViewModel
             (sender, message) =>
             {
                 ItemsList.Add(message.Items);
-                json.AddItemsToFile(message.Items);
+                jsonBase.AddItemsToFile(message.Items);
+                QuantityCount = _dbService.GetCount();
             });
     
         WeakReferenceMessenger.Default.Register<UpdateItemMessage>(this,
             (sender, message) =>
             {
-                ItemsList.Remove(ItemsList.FirstOrDefault(i => i.Id == message.UpdatedItem.Id));
+                ItemsList.Remove(ItemsList.FirstOrDefault(i => i?.Id == message.UpdatedItem.Id));
                 ItemsList.Add(message.UpdatedItem);
+                
+                JsonBase json = new();
+                json.ClearFile();
+                foreach (var item in ItemsList)
+                {
+                    json.AddItemsToFile(item!);
+                }
+                QuantityCount = _dbService.GetCount();
             });
-    }
 
+       QuantityCount = _dbService.GetCount();
+
+    }
 
     [RelayCommand]
     private void AddItem()
@@ -67,12 +82,23 @@ public partial class ItemsViewModel : BaseViewModel
         {
             ItemsList.Remove(item);
             SearchedItems.Remove(item);
-
-            JsonAdd json = new JsonAdd();
-            json.RemoveItemFromFile(item);  
+            JsonBase json = new JsonBase();
+            json.RemoveItemFromFile(item);
+            try
+            {
+                _dbService.RemoveFromDb(item.Id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
+            QuantityCount = _dbService.GetCount();
+           
         }
     }
-
+    
     private bool CanRemove => ItemsList.Count > 0;
    
     [RelayCommand]
@@ -91,8 +117,8 @@ public partial class ItemsViewModel : BaseViewModel
         else
         {
             var filteredItems = ItemsList.Where(i =>
-                i?.ItemName?.Contains(SearchKeyword, StringComparison.OrdinalIgnoreCase) == true ||
-                i?.Category.Contains(SearchKeyword, StringComparison.OrdinalIgnoreCase) == true);
+                i?.ItemName?.Contains(SearchKeyword!, StringComparison.OrdinalIgnoreCase) == true ||
+                i?.Category.Contains(SearchKeyword!, StringComparison.OrdinalIgnoreCase) == true);
             foreach (var item in filteredItems)
             {
                 SearchedItems.Add(item);
@@ -108,7 +134,9 @@ public partial class ItemsViewModel : BaseViewModel
         if (param is Items item)
         {
             WeakReferenceMessenger.Default.Send(new ChangeViewModelMessage(_factory.Create(3)));
-            WeakReferenceMessenger.Default.Send(new UpdateItemMessage(item));
+            WeakReferenceMessenger.Default.Send(new SendItemMessage(item));
         }
     }
+    
+    
 }

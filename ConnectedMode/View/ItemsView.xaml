@@ -63,7 +63,7 @@
                            FontWeight="Medium"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Text="200" />
+                           Text="{Binding QuantityCount}" />
             </Grid>
         </Border>
 
@@ -99,11 +99,11 @@
                 x:Name="SearchedItems" />
         </Grid>
 
-
-        <Label Grid.Row="3"
-               Grid.Column="0"
-               Grid.ColumnSpan="6"
-               Content="{Binding ErrorMessage}" />
+        <!-- -->
+        <!-- <Label Grid.Row="3" -->
+        <!--        Grid.Column="0" -->
+        <!--        Grid.ColumnSpan="6" -->
+        <!--        Content="{Binding ErrorMessage}" /> -->
 
         <Grid Grid.Row="4" Grid.Column="0" ColumnSpan="6">
             <Grid.ColumnDefinitions>

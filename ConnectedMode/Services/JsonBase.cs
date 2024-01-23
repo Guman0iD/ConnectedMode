@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using ConnectedMode.Model;
@@ -7,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace ConnectedMode.Services;
 
-public class JsonAdd
+public class JsonBase
 {
     private const string _filePath = "items.json";
     
@@ -50,5 +52,10 @@ public class JsonAdd
             string updatedJson = JsonConvert.SerializeObject(existingItems, Formatting.Indented);
             File.WriteAllText(_filePath, updatedJson);
         }
+    }
+    
+    public void ClearFile()
+    {
+        File.WriteAllText(_filePath, string.Empty);
     }
 }
