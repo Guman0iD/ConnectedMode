@@ -30,12 +30,12 @@
         <StackPanel Margin="10">
             
             <TextBlock
-                Text="Item name:"
+                Text=  "{Binding ItemNameLabel , StringFormat = 'Item name: {0}' }"
                 Margin="0,5,0,5" />
             <TextBox
                 Text="{Binding CurrentItem.ItemName}" />
 
-            <TextBlock Text="Сategory:"
+            <TextBlock Text="{Binding CategoryLabel, StringFormat = 'Category: {0}' }"
                        Margin="0,5,0,5" />
             <ComboBox SelectedValue="{Binding CurrentItem.Category}" SelectedValuePath="Text">
                 <TextBlock Text="Food Products" />
@@ -61,7 +61,7 @@
 
                 <TextBlock Grid.Column="0"
                            Grid.Row="0"
-                           Text="Price:"
+                           Text="{Binding PriceLabel, StringFormat = 'Price: {0}' }"
                            Margin="0,5,0,5" />
 
                 <xctk:IntegerUpDown
@@ -75,7 +75,7 @@
                 <TextBlock
                     Grid.Column="1"
                     Grid.Row="0"
-                    Text="Quantity:"
+                    Text="{Binding QuantityLabel, StringFormat = 'Quantity: {0}' }"
                     Margin="0,5,0,5">
                 </TextBlock>
 

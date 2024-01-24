@@ -1,14 +1,10 @@
 using System;
-using System.Data;
-using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using ConnectedMode.Messages;
 using ConnectedMode.Model;
 using ConnectedMode.Services;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 namespace ConnectedMode.ViewModel;
 
@@ -40,6 +36,17 @@ public partial class AddItemViewModel : BaseViewModel
     [RelayCommand]
     private void Add()
     {
+        if (string.IsNullOrEmpty(CurrentItem.ItemName) || string.IsNullOrEmpty(CurrentItem.Category)
+                                                       || CurrentItem.Price == 0 || CurrentItem.Quantity == 0)
+        {
+            ItemNameLabel = "*";
+            CategoryLabel = "*";
+            PriceLabel = "*";
+            QuantityLabel = "*";
+            _message.Show("Fields with '*' must be filled in","Error");
+            return;
+        }
+        
         var tableName = "Items";
         try
         {
@@ -51,7 +58,27 @@ public partial class AddItemViewModel : BaseViewModel
             _message.Show("Cannot add an item to the database", "Error");
             throw;
         }
+
         WeakReferenceMessenger.Default.Send(new AddItemMessage(this, CurrentItem));
         Back();
     }
+
+    [ObservableProperty] 
+    private string _itemNameLabel = null!;
+    [ObservableProperty] 
+    private string _categoryLabel = null!;
+    [ObservableProperty] 
+    private string _priceLabel = null!;
+    [ObservableProperty] 
+    private string _quantityLabel = null!;
+    
+    // private bool CanAdd()
+    // {
+    //     // return !string.IsNullOrWhiteSpace(CurrentItem.ItemName);
+    //     // return !string.IsNullOrEmpty(CurrentItem.ItemName)
+    //     return CurrentItem.Quantity != 0;
+    //     //        && !string.IsNullOrEmpty(CurrentItem.Category)
+    //     //        && CurrentItem.Price != 0
+    //     //        && !string.IsNullOrEmpty(CurrentItem.Description);
+    // }
 }

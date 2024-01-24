@@ -4,8 +4,90 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="300">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="1"
+               Grid.Row="0"
+               DockPanel.Dock="Top"
+               Content="Item info."
+               HorizontalAlignment="Center"
+               FontWeight="Medium" />
+
+        <StackPanel Grid.Row="1" Grid.Column="1"
+                    Margin="0,20,0,0">
+            <TextBlock
+                Text="Item name:"
+                HorizontalAlignment="Center"
+                FontWeight="Medium"
+                Margin="0,10,0,0" />
+            <TextBlock
+                TextAlignment="Center"
+                Text="{Binding SelectedItem.ItemName}" />
+
+            <TextBlock
+                Text="Item category:"
+                HorizontalAlignment="Center"
+                FontWeight="Medium"
+                Margin="0,10,0,0" />
+            <TextBlock
+                TextAlignment="Center"
+                Text="{Binding SelectedItem.Category}" />
+
+            <TextBlock
+                Text="Item price:"
+                HorizontalAlignment="Center"
+                FontWeight="Medium"
+                Margin="0,10,0,0" />
+            <TextBlock
+                TextAlignment="Center"
+                Text="{Binding SelectedItem.Price}" />
+
+            <TextBlock
+                Text="Item quantity:"
+                HorizontalAlignment="Center"
+                FontWeight="Medium"
+                Margin="0,10,0,0" />
+            <TextBlock
+                TextAlignment="Center"
+                Text="{Binding SelectedItem.Quantity}" />
+
+            <TextBlock
+                Text="Item description:"
+                HorizontalAlignment="Center"
+                FontWeight="Medium"
+                Margin="0,10,0,0" />
+            <TextBlock
+                TextAlignment="Center"
+                Text="{Binding SelectedItem.Description}" />
+            
+            <TextBlock
+                Text="Item add date:"
+                HorizontalAlignment="Center"
+                FontWeight="Medium"
+                Margin="0,10,0,0" />
+            <TextBlock
+                TextAlignment="Center"
+                Text="{Binding SelectedItem.AddedDate}"/>
+        </StackPanel>
         
+        <Button
+            Grid.Column="1"
+            Grid.Row="2"
+            Content="Back"
+            VerticalAlignment="Center"
+            Margin="0,15,0,0"
+            Command="{Binding BackCommand}" 
+            DockPanel.Dock="Bottom"/>
     </Grid>
 </UserControl>

@@ -7,5 +7,32 @@
     "Price": 900,
     "Description": "Asus",
     "AddedDate": "2024-01-23T16:00:47.1779853+04:00"
+  },
+  {
+    "Id": 10,
+    "ItemName": "Apple",
+    "Quantity": 1,
+    "Category": "Food Products",
+    "Price": 1,
+    "Description": "red",
+    "AddedDate": "2024-01-23T17:25:26.6412712+04:00"
+  },
+  {
+    "Id": 11,
+    "ItemName": "Cherry",
+    "Quantity": 1,
+    "Category": "Food Products",
+    "Price": 1,
+    "Description": "red",
+    "AddedDate": "2024-01-23T17:25:37.1509642+04:00"
+  },
+  {
+    "Id": 12,
+    "ItemName": "banana",
+    "Quantity": 2,
+    "Category": "Food Products",
+    "Price": 2,
+    "Description": "qwe",
+    "AddedDate": "2024-01-23T17:25:47.9912507+04:00"
   }
 ]

@@ -13,7 +13,8 @@ namespace ConnectedMode.ViewModel;
 [INotifyPropertyChanged]
 public partial class UpdateItemViewModel : BaseViewModel
 {
-    [ObservableProperty] private Items _selectedItem = null!;
+    [ObservableProperty] 
+    private Items _selectedItem = null!;
     private DataBaseService _dbService;
     private readonly ViewModelFactory _factory;
     private ErrorMessage _errorMessage;

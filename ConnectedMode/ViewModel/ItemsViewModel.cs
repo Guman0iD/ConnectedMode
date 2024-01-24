@@ -137,6 +137,15 @@ public partial class ItemsViewModel : BaseViewModel
             WeakReferenceMessenger.Default.Send(new SendItemMessage(item));
         }
     }
-    
+
+    [RelayCommand]
+    private void Description(object? param)
+    {
+        if (param is Items item)
+        {
+            WeakReferenceMessenger.Default.Send(new ChangeViewModelMessage(_factory.Create(4)));
+            WeakReferenceMessenger.Default.Send(new SendItemMessage(item));
+        }
+    }
     
 }

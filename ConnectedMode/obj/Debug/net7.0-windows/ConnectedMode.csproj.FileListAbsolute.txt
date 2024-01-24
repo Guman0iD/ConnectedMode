@@ -108,3 +108,4 @@ D:\StepIT\ADO.NET\ConncectedMode\ConnectedMode\bin\Debug\net7.0-windows\zh-Hans\
 D:\StepIT\ADO.NET\ConncectedMode\ConnectedMode\obj\Debug\net7.0-windows\View\UpdateItemView.baml
 D:\StepIT\ADO.NET\ConncectedMode\ConnectedMode\obj\Debug\net7.0-windows\View\UpdateItemView.g.cs
 D:\StepIT\ADO.NET\ConncectedMode\ConnectedMode\bin\Debug\net7.0-windows\Newtonsoft.Json.dll
+D:\StepIT\ADO.NET\ConncectedMode\ConnectedMode\bin\Debug\net7.0-windows\Microsoft.Xaml.Behaviors.dll

@@ -11,7 +11,8 @@ public class ViewModelFactory
             0 => App.ServiceProvider.GetService<MainViewModel>(),
             1 => App.ServiceProvider.GetService<AddItemViewModel>(),
             2 => App.ServiceProvider.GetService<ItemsViewModel>(),
-            3 => App.ServiceProvider.GetService<UpdateItemViewModel>()
+            3 => App.ServiceProvider.GetService<UpdateItemViewModel>(),
+            4 => App.ServiceProvider.GetService<ItemsInfoViewModel>()
         };
     }
 }

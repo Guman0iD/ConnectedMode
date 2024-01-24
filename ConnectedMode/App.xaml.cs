@@ -29,6 +29,7 @@ namespace ConnectedMode
             ServiceCollection.AddTransient<AddItemViewModel>();
             ServiceCollection.AddSingleton<ItemsViewModel>();
             ServiceCollection.AddSingleton<UpdateItemViewModel>();
+            ServiceCollection.AddSingleton<ItemsInfoViewModel>();
             
             ServiceCollection.AddSingleton<ViewModelFactory>();
             

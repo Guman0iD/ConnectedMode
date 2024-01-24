@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
+             xmlns:b = "http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -92,11 +94,29 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <ListBox
-                Grid.Column="1"
-                ItemsSource="{Binding SearchedItems}"
-                DisplayMemberPath="ItemName"
-                x:Name="SearchedItems" />
+            <!-- <ListBox -->
+            <!--     Grid.Column="1" -->
+            <!--     ItemsSource="{Binding SearchedItems}" -->
+            <!--     DisplayMemberPath="ItemName" -->
+            <!--     x:Name="SearchedItems" /> -->
+            
+            
+            <ListBox Grid.Column="1" x:Name="SearchedItems" ItemsSource="{Binding SearchedItems}" HorizontalContentAlignment="Stretch">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding DescriptionCommand}" CommandParameter="{Binding SelectedItem, ElementName=SearchedItems}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left" Text="{Binding ItemName}" Margin="5" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            
         </Grid>
 
         <!-- -->
@@ -125,8 +145,9 @@
                 Content="Description"
                 Height="30"
                 Margin="5"
+                Command="{Binding DescriptionCommand}"
 
-                CommandParameter="{Binding ElementName=ItemsList, Path=SelectedItem}" />
+                CommandParameter="{Binding ElementName = SearchedItems, Path=SelectedItem}" />
 
 
             <Button
