@@ -26,4 +26,11 @@
       <None Remove="Items.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="ConnectionMode.sql" />
+      <Resource Include="ConnectionMode.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>

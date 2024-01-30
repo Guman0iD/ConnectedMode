@@ -9,9 +9,9 @@
         Title="Store" Height="450" Width="550"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type vm:ItemsViewModel}">
-            <v:ItemsView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ItemsViewModel}">
+                <v:ItemsView/>
+            </DataTemplate>
         <DataTemplate DataType="{x:Type vm:ItemsInfoViewModel}">
             <v:ItemsInfoView/>
         </DataTemplate> 

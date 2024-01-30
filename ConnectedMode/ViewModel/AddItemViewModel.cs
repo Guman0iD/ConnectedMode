@@ -15,12 +15,14 @@ public partial class AddItemViewModel : BaseViewModel
     private readonly ViewModelFactory _factory;
     private DataBaseService _dbService;
     private readonly ErrorMessage _message;
+    private JsonBase _json;
 
     public AddItemViewModel(ViewModelFactory factory, DataBaseService dbService)
     {
         _factory = factory;
         _dbService = dbService;
         _message = new ErrorMessage();
+        _json = new JsonBase();
         CurrentItem = new Items()
         {
             AddedDate = DateTime.Now
@@ -46,12 +48,11 @@ public partial class AddItemViewModel : BaseViewModel
             _message.Show("Fields with '*' must be filled in","Error");
             return;
         }
-        
-        var tableName = "Items";
         try
         {
             using var connection = _dbService.OpenConnection();
-            CurrentItem.Id = _dbService.AddItem(CurrentItem, tableName);
+            CurrentItem.Id = _dbService.AddItem(CurrentItem);
+            _json.AddItemsToFile(CurrentItem);
         }
         catch (Exception e)
         {
@@ -59,7 +60,7 @@ public partial class AddItemViewModel : BaseViewModel
             throw;
         }
 
-        WeakReferenceMessenger.Default.Send(new AddItemMessage(this, CurrentItem));
+      //  WeakReferenceMessenger.Default.Send(new AddItemMessage(this, CurrentItem));
         Back();
     }
 
@@ -71,14 +72,5 @@ public partial class AddItemViewModel : BaseViewModel
     private string _priceLabel = null!;
     [ObservableProperty] 
     private string _quantityLabel = null!;
-    
-    // private bool CanAdd()
-    // {
-    //     // return !string.IsNullOrWhiteSpace(CurrentItem.ItemName);
-    //     // return !string.IsNullOrEmpty(CurrentItem.ItemName)
-    //     return CurrentItem.Quantity != 0;
-    //     //        && !string.IsNullOrEmpty(CurrentItem.Category)
-    //     //        && CurrentItem.Price != 0
-    //     //        && !string.IsNullOrEmpty(CurrentItem.Description);
-    // }
+
 }

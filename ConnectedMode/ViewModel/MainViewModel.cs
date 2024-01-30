@@ -10,23 +10,25 @@ namespace ConnectedMode.ViewModel;
 [INotifyPropertyChanged]
 public partial class MainViewModel : BaseViewModel
 {
-    private readonly DataBaseService _dbService;
 
-    public MainViewModel(DataBaseService dbService)
+    public MainViewModel()
     {
-        _dbService = dbService;
-
+       
         WeakReferenceMessenger.Default.Register<ChangeViewModelMessage>(this,
-            (sender, message) => { CurrentViewModel = message.ViewModel; });
+            (sender, message) =>
+            {
+                CurrentViewModel = message.ViewModel;
+            });
 
         var viewModel = App.ServiceProvider.GetService<ItemsViewModel>()!;
 
         var changeViewModelMessage = new ChangeViewModelMessage(viewModel);
         WeakReferenceMessenger.Default.Send(changeViewModelMessage);
 
-        _dbService.InitializeDb();
-        _dbService.CreateTable();
+        // _dbService.InitializeDb();
+        // _dbService.CreateTable();
     }
 
-    [ObservableProperty] private BaseViewModel? _currentViewModel;
+    [ObservableProperty]
+    private BaseViewModel? _currentViewModel;
 }

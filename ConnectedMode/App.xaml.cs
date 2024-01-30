@@ -27,7 +27,7 @@ namespace ConnectedMode
             
             ServiceCollection.AddSingleton<MainViewModel>();
             ServiceCollection.AddTransient<AddItemViewModel>();
-            ServiceCollection.AddSingleton<ItemsViewModel>();
+            ServiceCollection.AddTransient<ItemsViewModel>();
             ServiceCollection.AddSingleton<UpdateItemViewModel>();
             ServiceCollection.AddSingleton<ItemsInfoViewModel>();
             
@@ -43,6 +43,7 @@ namespace ConnectedMode
             ServiceCollection.AddTransient<DataBaseService>();
             
             ServiceProvider = ServiceCollection.BuildServiceProvider();
+            
             var view = ServiceProvider.GetService<MainView>()!;
             view.Show();
         }

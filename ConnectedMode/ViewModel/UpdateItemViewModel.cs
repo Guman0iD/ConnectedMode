@@ -1,12 +1,13 @@
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using ConnectedMode.Messages;
 using ConnectedMode.Model;
 using ConnectedMode.Services;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace ConnectedMode.ViewModel;
 
@@ -18,12 +19,14 @@ public partial class UpdateItemViewModel : BaseViewModel
     private DataBaseService _dbService;
     private readonly ViewModelFactory _factory;
     private ErrorMessage _errorMessage;
+    private JsonBase _json;
 
     public UpdateItemViewModel(ViewModelFactory factory, DataBaseService dbService, ErrorMessage errorMessage)
     {
         _factory = factory;
         _dbService = dbService;
         _errorMessage = errorMessage;
+        _json = new JsonBase();
         WeakReferenceMessenger.Default.Register<SendItemMessage>(this,
             (sender, message) => { SelectedItem = message.UpdatedItem; });
     }
@@ -40,6 +43,7 @@ public partial class UpdateItemViewModel : BaseViewModel
         try
         {
             _dbService.UpdateItemDb(SelectedItem);
+            UpdateJson();
         }
         catch (Exception e)
         {
@@ -47,6 +51,17 @@ public partial class UpdateItemViewModel : BaseViewModel
             throw;
         }
         WeakReferenceMessenger.Default.Send(new ChangeViewModelMessage(_factory.Create(2)));
-        WeakReferenceMessenger.Default.Send(new UpdateItemMessage(SelectedItem));
+       // WeakReferenceMessenger.Default.Send(new UpdateItemMessage(SelectedItem));
+    }
+
+
+    private void UpdateJson()
+    {
+       ICollection<Items> itemsList =  _dbService.LoadItemsFromDb();
+        _json.ClearFile();
+        foreach (var item in itemsList)
+        {
+            _json.AddItemsToFile(item);
+        }
     }
 }

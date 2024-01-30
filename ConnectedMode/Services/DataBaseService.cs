@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using ConnectedMode.Model;
 using Microsoft.Data.SqlClient;
@@ -23,81 +25,62 @@ public class DataBaseService
         connection.Open();
         return connection;
     }
-
-    public void InitializeDb()
+    
+    public ICollection<Items> LoadItemsFromDb()
     {
+        ObservableCollection<Items> students = new ObservableCollection<Items>();
+
         using var connection = OpenConnection();
+        using var loadCommand = new SqlCommand();
+        loadCommand.Connection = connection;
+        loadCommand.CommandType = CommandType.StoredProcedure;
+        loadCommand.CommandText = "sp_GetAllItems";
 
-        var dbName = "Store";
-
-        var existsDbCommand = new SqlCommand()
+        using var reader = loadCommand.ExecuteReader();
+        while (reader.Read())
         {
-            Connection = connection,
-            CommandText = "IF (EXISTS(SELECT 1 FROM sys.databases WHERE name = @dbName)) SELECT 1 ELSE SELECT 0"
-        };
-
-        existsDbCommand.Parameters.AddWithValue("@dbName", dbName);
-
-        int result = (int)existsDbCommand.ExecuteScalar();
-
-        if (result != 1)
-        {
-            using var createDbcommand = new SqlCommand();
-            createDbcommand.Connection = connection;
-            createDbcommand.CommandType = CommandType.StoredProcedure;
-            createDbcommand.CommandText = "sp_CreateDb";
-
-            createDbcommand.ExecuteNonQuery();
-        }
-    }
-
-    public void CreateTable()
-    {
-        using (var connection = OpenConnection())
-        {
-            using var useCommand = new SqlCommand("USE [Store]", connection);
-            useCommand.ExecuteNonQuery();
-
-            using (var checkTable = new SqlCommand("SELECT COUNT(*) FROM sys.tables WHERE name = 'Items'", connection))
+            students.Add(new Items()
             {
-                int tablesCount = (int)checkTable.ExecuteScalar();
-                if (tablesCount == 0)
-                {
-                    try
-                    {
-                        using var createTableCommand = new SqlCommand();
-                        createTableCommand.Connection = connection;
-                        createTableCommand.CommandType = CommandType.StoredProcedure;
-                        createTableCommand.CommandText = "sp_CreateTable";
-                        createTableCommand.ExecuteNonQuery();
-                    }
-                    catch (Exception e)
-                    {
-                        _error.Show("Failed to create table", "Error");
-                    }
-                }
-            }
+                Id = reader.GetInt32(0),
+                ItemName = reader.GetString(1),
+                Quantity = reader.GetInt32(2),
+                Category = reader.GetString(3),
+                Price = (int)reader.GetDecimal(4), //
+                Description = reader.GetString(5),
+                AddedDate = reader.GetDateTime(6)
+            });
         }
+
+        return students;
     }
 
-    public int AddItem(Items item, string tableName)
+    
+    public int AddItem(Items item)
     {
         int generatedId;
         using var connection = OpenConnection();
         using var addCommand = new SqlCommand();
         addCommand.Connection = connection;
-        addCommand.CommandText = $" INSERT INTO {tableName}" +
-                                 $" OUTPUT INSERTED.Id" +
-                                 $" VALUES (@ItemName, @Quantity, @Category, @Price, @Description, @AddedDate)";
+        addCommand.CommandType = CommandType.StoredProcedure;
+        addCommand.CommandText = "sp_InsertItem";
         addCommand.Parameters.AddWithValue("@ItemName", item.ItemName);
         addCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
         addCommand.Parameters.AddWithValue("@Category", item.Category);
         addCommand.Parameters.AddWithValue("@Price", item.Price);
         addCommand.Parameters.AddWithValue("@Description", item.Description);
         addCommand.Parameters.AddWithValue("@AddedDate", item.AddedDate);
-        generatedId = (int)addCommand.ExecuteScalar();
+        SqlParameter insertedIdParameter = new SqlParameter
+        {
+            ParameterName = "@InsertedId",
+            SqlDbType = SqlDbType.Int,
+            Direction = ParameterDirection.Output
+        };
+        addCommand.Parameters.Add(insertedIdParameter);
+        addCommand.ExecuteNonQuery();
+        generatedId = (int)insertedIdParameter.Value;
         return generatedId;
     }
+
 
     public void RemoveFromDb(int id)
     {

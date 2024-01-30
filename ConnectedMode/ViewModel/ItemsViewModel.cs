@@ -18,56 +18,43 @@ public partial class ItemsViewModel : BaseViewModel
 {
     public ICollection<Items?> ItemsList { get; }
     public ICollection<Items?> SearchedItems { get; }
+
     private readonly ViewModelFactory _factory;
-    private readonly IConfiguration _config;
+    private ErrorMessage _message;
     private DataBaseService _dbService;
 
-    [ObservableProperty] 
-    private string? _searchKeyword;
-    [ObservableProperty]
-    private int _quantityCount;
+    [ObservableProperty] private string? _searchKeyword;
+    [ObservableProperty] private int _quantityCount;
 
-    public ItemsViewModel(IConfiguration config, ViewModelFactory factory, DataBaseService dbService)
+    public ItemsViewModel(ViewModelFactory factory, DataBaseService dbService)
     {
-        _config = config;
         _factory = factory;
         _dbService = dbService;
+        _message = new ErrorMessage();
         ItemsList = new ObservableCollection<Items?>();
         SearchedItems = new ObservableCollection<Items?>();
-        JsonBase jsonBase = new JsonBase();
-        List<Items> itemsFromFile = jsonBase.GetItemsFromFile();
-
-        foreach (var game in itemsFromFile)
-        {
-            ItemsList.Add(game);
-        }
-        
-        WeakReferenceMessenger.Default.Register<AddItemMessage>(this,
-            (sender, message) =>
-            {
-                ItemsList.Add(message.Items);
-                jsonBase.AddItemsToFile(message.Items);
-                QuantityCount = _dbService.GetCount();
-            });
-    
-        WeakReferenceMessenger.Default.Register<UpdateItemMessage>(this,
-            (sender, message) =>
-            {
-                ItemsList.Remove(ItemsList.FirstOrDefault(i => i?.Id == message.UpdatedItem.Id));
-                ItemsList.Add(message.UpdatedItem);
-                
-                JsonBase json = new();
-                json.ClearFile();
-                foreach (var item in ItemsList)
-                {
-                    json.AddItemsToFile(item!);
-                }
-                QuantityCount = _dbService.GetCount();
-            });
-
-       QuantityCount = _dbService.GetCount();
-
+        LoadStudents();
+        QuantityCount = _dbService.GetCount();
     }
+
+
+    private void LoadStudents()
+    {
+        try
+        {
+            var itemsFromDb = _dbService.LoadItemsFromDb();
+            foreach (var item in itemsFromDb)
+            {
+                ItemsList.Add(item);
+            }
+        }
+        catch (Exception e)
+        {
+            _message.Show($"Error loading items: {e.Message}", "Error");
+            throw;
+        }
+    }
+
 
     [RelayCommand]
     private void AddItem()
@@ -90,17 +77,17 @@ public partial class ItemsViewModel : BaseViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _message.Show($"Can't remove item from db{e.Message}", "Error");
                 throw;
             }
-           
+
             QuantityCount = _dbService.GetCount();
-           
         }
     }
-    
+
     private bool CanRemove => ItemsList.Count > 0;
-   
+    private bool CanUpdate => ItemsList.Count > 0;
+
     [RelayCommand]
     private void Search()
     {
@@ -128,7 +115,7 @@ public partial class ItemsViewModel : BaseViewModel
         SearchKeyword = string.Empty;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = "CanUpdate")]
     private void UpdateItem(object? param)
     {
         if (param is Items item)
@@ -138,7 +125,9 @@ public partial class ItemsViewModel : BaseViewModel
         }
     }
 
-    [RelayCommand]
+    private bool CanGetDescription => SearchedItems.Count > 0;
+
+    [RelayCommand(CanExecute = "CanGetDescription")]
     private void Description(object? param)
     {
         if (param is Items item)
@@ -147,5 +136,4 @@ public partial class ItemsViewModel : BaseViewModel
             WeakReferenceMessenger.Default.Send(new SendItemMessage(item));
         }
     }
-    
 }

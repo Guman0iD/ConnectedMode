@@ -93,12 +93,6 @@
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
-
-            <!-- <ListBox -->
-            <!--     Grid.Column="1" -->
-            <!--     ItemsSource="{Binding SearchedItems}" -->
-            <!--     DisplayMemberPath="ItemName" -->
-            <!--     x:Name="SearchedItems" /> -->
             
             
             <ListBox Grid.Column="1" x:Name="SearchedItems" ItemsSource="{Binding SearchedItems}" HorizontalContentAlignment="Stretch">
@@ -119,12 +113,7 @@
             
         </Grid>
 
-        <!-- -->
-        <!-- <Label Grid.Row="3" -->
-        <!--        Grid.Column="0" -->
-        <!--        Grid.ColumnSpan="6" -->
-        <!--        Content="{Binding ErrorMessage}" /> -->
-
+      
         <Grid Grid.Row="4" Grid.Column="0" ColumnSpan="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
